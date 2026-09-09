@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInBloc extends ChangeNotifier {
@@ -20,6 +21,17 @@ class SignInBloc extends ChangeNotifier {
   String? _errorCode;
   String? get errorCode => _errorCode;
 
+    String _appVersion = '0.0';
+  String get appVersion => _appVersion;
+
+  String _packageName = '';
+  String get packageName => _packageName;
+  void initPackageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    _appVersion = packageInfo.version;
+    _packageName = packageInfo.packageName;
+    notifyListeners();
+  }
   void checkSignIn() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     _isSignedIn = sp.getBool('signed_in') ?? false;
@@ -62,5 +74,4 @@ class SignInBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initPackageInfo() {}
 }

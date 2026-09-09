@@ -3,7 +3,7 @@ import 'dart:math' as math;
 
 import 'package:digitalhunt/Blocs/bottomNavBar_bloc.dart';
 import 'package:digitalhunt/Views/pages/news.dart';
-import 'package:digitalhunt/Views/pages/profile_settings.dart';
+import 'package:digitalhunt/Views/pages/profile.dart';
 import 'package:digitalhunt/Views/pages/search.dart';
 import 'package:digitalhunt/widgets/custom_text.dart';
 import 'package:digitalhunt/widgets/page_item.dart';

@@ -15,20 +15,21 @@ class CustomText extends StatelessWidget {
   final TextDecoration? textDecoration;
   final String? fontFam;
   final FontStyle? fontStyle;
-  const CustomText(
-      {super.key,
-      @required this.text,
-      this.size,
-      this.color,
-      this.fontWeight,
-      this.letterSpacing,
-      this.wordSpacing,
-      this.overflow,
-      this.maxLines,
-      this.textAlign,
-      this.textDecoration,
-      this.fontFam,
-      this.fontStyle});
+  const CustomText({
+    super.key,
+    @required this.text,
+    this.size,
+    this.color,
+    this.fontWeight,
+    this.letterSpacing,
+    this.wordSpacing,
+    this.overflow,
+    this.maxLines,
+    this.textAlign,
+    this.textDecoration,
+    this.fontFam,
+    this.fontStyle,
+  });
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -65,49 +66,81 @@ class CustomRich extends StatelessWidget {
 
   final LongPressGestureRecognizer? longPressGestureRecognizer;
   final VoidCallback? callback;
-  const CustomRich(
-      {super.key,
-      this.lightFont,
-      this.thirdText,
-      this.boldFont,
-      this.lightFontSize,
-      this.boldFontSize,
-      this.letterSpacing,
-      this.longPressGestureRecognizer,
-      this.callback,
-      this.lightColor,
-      this.boldColor,
-      this.maxlines,
-      this.textAlign,
-      this.reversed = false});
+  const CustomRich({
+    super.key,
+    this.lightFont,
+    this.thirdText,
+    this.boldFont,
+    this.lightFontSize,
+    this.boldFontSize,
+    this.letterSpacing,
+    this.longPressGestureRecognizer,
+    this.callback,
+    this.lightColor,
+    this.boldColor,
+    this.maxlines,
+    this.textAlign,
+    this.reversed = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return RichText(
       maxLines: maxlines ?? 5,
       textAlign: textAlign ?? TextAlign.start,
-      text: TextSpan(
-        children: [
-          TextSpan(
-              recognizer: TapGestureRecognizer()..onTap = callback,
-              text: boldFont,
-              style: TextStyle(
-                  fontFamily: Theme.of(context).textTheme.titleMedium!.fontFamily,
-                  color: callback != null ? Config().appColor : boldColor ?? Theme.of(context).textTheme.titleMedium!.color,
-                  fontSize: boldFontSize ?? 15,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: letterSpacing,
-                  decoration: callback != null ? TextDecoration.underline : TextDecoration.none)),
-          TextSpan(
-              text: lightFont,
-              style: TextStyle(
-                fontFamily: Theme.of(context).textTheme.titleMedium!.fontFamily,
-                color: lightColor ?? Colors.grey,
-                fontSize: lightFontSize ?? 13,
-                fontWeight: FontWeight.w500,
-              )),
-        ],
-      ),
+      text: reversed == true
+          ? TextSpan(
+              children: [
+                TextSpan(
+                  text: lightFont,
+                  style: TextStyle(
+                    fontFamily: Theme.of(context).textTheme.titleMedium!.fontFamily,
+                    color: lightColor ?? Colors.grey,
+                    fontSize: lightFontSize ?? 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                TextSpan(text: ' '),
+                TextSpan(
+                  recognizer: TapGestureRecognizer()..onTap = callback,
+                  text: boldFont,
+                  style: TextStyle(
+                    fontFamily: Theme.of(context).textTheme.titleMedium!.fontFamily,
+                    color: callback != null ? Config().appColor : boldColor ?? Theme.of(context).textTheme.titleMedium!.color,
+                    fontSize: boldFontSize ?? 15,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: letterSpacing,
+                    decoration: callback != null ? TextDecoration.underline : TextDecoration.none,
+                  ),
+                ),
+              ],
+            )
+          : TextSpan(
+              children: [
+                TextSpan(
+                  recognizer: TapGestureRecognizer()..onTap = callback,
+                  text: boldFont,
+                  style: TextStyle(
+                    fontFamily: Theme.of(context).textTheme.titleMedium!.fontFamily,
+                    color: callback != null ? Config().appColor : boldColor ?? Theme.of(context).textTheme.titleMedium!.color,
+                    fontSize: boldFontSize ?? 15,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: letterSpacing,
+                    decoration: callback != null ? TextDecoration.underline : TextDecoration.none,
+                  ),
+                ),                TextSpan(text: ' '),
+
+                TextSpan(
+                  text: lightFont,
+                  style: TextStyle(
+                    fontFamily: Theme.of(context).textTheme.titleMedium!.fontFamily,
+                    color: lightColor ?? Colors.grey,
+                    fontSize: lightFontSize ?? 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }

@@ -18,7 +18,7 @@ class ThemeModel {
     colorScheme: ColorScheme.light(surface: Colors.white).copyWith(primary: Config().appColor),
     // colorScheme: ColorScheme.fromSeed(seedColor: Config().appColor).copyWith(primary: Config().appColor), // Generates a cohesive blue color scheme
     useMaterial3: true,
-    iconTheme: IconThemeData(color: Colors.grey[900]),
+    iconTheme: IconThemeData(color: Colors.grey[600]),
     fontFamily: _fontFamily,
     scaffoldBackgroundColor: Colors.grey[100],
     brightness: Brightness.light,

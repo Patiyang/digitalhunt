@@ -20,6 +20,8 @@ class Config {
   //app theme color
   final Color appColor = Color(0XFF007BFD);
   final Color white = Colors.white;
+    final Color amber = Colors.yellow;
+
   //Intro images
   final String introImage1 = 'Assets/images/news2.png';
   final String introImage2 = 'Assets/images/news3.png';
