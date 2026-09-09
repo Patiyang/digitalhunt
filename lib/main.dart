@@ -44,8 +44,8 @@ void main() async {
       ThemeModel().myValue = 'Poppins';
       return 'hi';
     } else {
-      prefs.setString('language', 'Kannada');
-      return 'kn';
+      prefs.setString('language', 'English');
+      return 'en';
     }
   }
 

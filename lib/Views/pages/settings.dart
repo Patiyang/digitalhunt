@@ -1,3 +1,4 @@
+import 'package:digitalhunt/Blocs/theme_bloc.dart';
 import 'package:digitalhunt/utils/config/config.dart';
 import 'package:digitalhunt/widgets/contact_us_items.dart';
 import 'package:digitalhunt/widgets/custom_settings_toggle.dart';
@@ -30,11 +31,14 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     // List<SettingsToggleItem>
     final sb = context.watch<SignInBloc>();
+    final tb = context.read<ThemeBloc>();
+
     return Scaffold(
       appBar: AppBar(elevation: 0, automaticallyImplyLeading: true),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-        children: [          SizedBox(height: 20),
+        children: [
+          SizedBox(height: 20),
 
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,13 +47,14 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
               CustomText(text: 'settings'.tr(), fontWeight: FontWeight.bold, size: 30),
               Text('Version: ${sb.appVersion}', style: TextStyle(fontSize: 13)),
             ],
-          ),          SizedBox(height: 20),
+          ),
+          SizedBox(height: 20),
 
           Divider(color: Theme.of(context).shadowColor),
-                    SizedBox(height: 20),
+          SizedBox(height: 20),
 
           Container(
-            decoration: BoxDecoration(color: Config().amber.withAlpha(150), borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: Theme.of(context).shadowColor, borderRadius: BorderRadius.circular(10)),
             padding: EdgeInsets.all(10),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,21 +62,24 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
               children: [
                 Icon(Icons.notifications),
                 SizedBox(width: 10),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomRich(
-                      boldFont: 'click_here',
-                      lightFont: 'missing_notifications'.tr(),
-                      reversed: true,
-                      callback: () {
-                        print('handle notification');
-                      },
-                    ),
-                    CustomText(text: 'missing_notification_details'.tr()),
-                  ],
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CustomRich(
+                        boldFont: 'click_here'.tr(),
+                        lightFont: 'missing_notifications'.tr(),
+                        reversed: true,
+                        callback: () {
+                          print('handle notification');
+                          
+                        },
+                      ),
+                      CustomText(text: 'missing_notification_details'.tr(), maxLines: 5),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -103,16 +111,18 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
               children: [
                 Icon(Icons.person),
                 SizedBox(width: 10),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomText(text: 'parental_ctrl'.tr()),
-                    CustomText(text: 'parental_ctrl_desc'.tr()),
-                  ],
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CustomText(text: 'parental_ctrl'.tr(), fontWeight: FontWeight.bold),
+                      CustomText(text: 'parental_ctrl_desc'.tr(), maxLines: 5),
+                    ],
+                  ),
                 ),
-                Spacer(),
+                SizedBox(width: 10),
                 Switch(
                   value: parentalControl,
                   onChanged: (val) {
@@ -142,6 +152,16 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
           //   mainAxisAlignment: MainAxisAlignment.center,
           //   children: settingsToggles.map((el) => NotificationToggle(settingsToggleItem: el)).toList(),
           // ),
+
+          // Switch(
+          //   value: tb.darkTheme!,
+          //   onChanged: (val) {
+          //     print(val);
+          //     // widget.settingsToggleItem.toggleValue = val;
+          //     // widget.settingsToggleItem.callbackAction;
+          //     setState(() {});
+          //   },
+          // ),
         ],
       ),
     );
@@ -154,12 +174,33 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   }
 
   getToggles() async {
+    final tb = context.read<ThemeBloc>();
+
     // await Future.delayed(Duration(microseconds: 10));
     settingsToggles = [
-      SettingsToggleItem(toggleIcon: Icon(Icons.notifications, size: 27), toggleTitle: 'notifications'.tr(), callbackAction: () {}, toggleValue: true),
-      SettingsToggleItem(toggleIcon: FaIcon(FontAwesomeIcons.video, size: 27), toggleTitle: 'video_autoplay'.tr(), callbackAction: () {}, toggleValue: false),
-      SettingsToggleItem(toggleIcon: Icon(Icons.dark_mode, size: 27), toggleTitle: 'night_mode'.tr(), callbackAction: () {}, toggleValue: false),
-      SettingsToggleItem(toggleIcon: Icon(Icons.location_pin, size: 27), toggleTitle: 'local_stories'.tr(), callbackAction: () {}, toggleValue: true),
+      SettingsToggleItem(toggleIcon: Icon(Icons.notifications, size: 27), toggleTitle: 'notifications'.tr(), callbackAction: () { setState(() {
+            
+          });}, toggleValue: true),
+      SettingsToggleItem(
+        toggleIcon: Icon(Icons.video_camera_front, size: 27),
+        toggleTitle: 'video_autoplay'.tr(),
+        callbackAction: () {
+          print('video autoplay');
+          setState(() {
+            
+          });
+        },
+        toggleValue: false,
+      ),
+      SettingsToggleItem(
+        toggleIcon: Icon(Icons.dark_mode, size: 27),
+        toggleTitle: 'night_mode'.tr(),
+        callbackAction: () => tb.toggleTheme(),
+        toggleValue: tb.darkTheme!,
+      ),
+      SettingsToggleItem(toggleIcon: Icon(Icons.location_pin, size: 27), toggleTitle: 'local_stories'.tr(), callbackAction: () { setState(() {
+            
+          });}, toggleValue: true),
     ];
     tileItems = [
       ContactItem(leading: Icon(Icons.info), title: 'about_us'.tr()),

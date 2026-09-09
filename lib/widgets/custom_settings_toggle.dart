@@ -13,14 +13,15 @@ class _NotificationToggleState extends State<NotificationToggle> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(15),
+      padding: EdgeInsets.symmetric(vertical:10, horizontal: 5),
+      width: 120,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(7), color: Theme.of(context).shadowColor.withAlpha(150)),
 
-      child: Column(
+      child: Column(mainAxisAlignment: MainAxisAlignment.center,
         children: [
           widget.settingsToggleItem.toggleIcon,
           SizedBox(height: 10),
-          CustomText(text: widget.settingsToggleItem.toggleTitle),
+          CustomText(text: widget.settingsToggleItem.toggleTitle, size: 13),
           SizedBox(height: 10),
 
           Switch(
@@ -28,10 +29,10 @@ class _NotificationToggleState extends State<NotificationToggle> {
             onChanged: (val) {
               print(val);
               widget.settingsToggleItem.toggleValue = val;
-              widget.settingsToggleItem.callbackAction;
-              setState(() {
-                
-              });
+              // print(widget.settingsToggleItem.callbackAction);
+
+              widget.settingsToggleItem.callbackAction.call();
+              // setState(() {});
             },
           ),
         ],
@@ -44,7 +45,7 @@ class SettingsToggleItem {
   final Icon toggleIcon;
   final String toggleTitle;
   bool toggleValue;
-  final VoidCallback callbackAction;
+  VoidCallback callbackAction;
 
   SettingsToggleItem({required this.toggleIcon, required this.toggleTitle, required this.callbackAction, required this.toggleValue});
 }
