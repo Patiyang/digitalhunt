@@ -43,7 +43,7 @@ class _SplashPageState extends State<SplashPage> {
 
   afterSplash() {
     final SignInBloc sb = context.read<SignInBloc>();
-    Future.delayed(Duration(milliseconds: 1500)).then((value) {
+    Future.delayed(Duration(milliseconds: 500)).then((value) {
       sb.isSignedIn == true || sb.guestUser == true ? gotoHomePage() : gotoSignInPage();
     });
   }
@@ -53,7 +53,7 @@ class _SplashPageState extends State<SplashPage> {
     if (sb.isSignedIn == true) {
       sb.getDataFromSp();
     }
-    nextScreenReplace(context, HomePage(initialDeepLink: uri,));
+    nextScreenReplace(context, HomeNav(initialDeepLink: uri,));
     // nextScreen(context, Way2NewsPageView(itemCount: pages.length, itemBuilder: (context, index) {
     //     final article = pages[index];
 

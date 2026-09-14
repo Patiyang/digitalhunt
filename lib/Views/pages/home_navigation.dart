@@ -2,62 +2,50 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:digitalhunt/Blocs/bottomNavBar_bloc.dart';
+import 'package:digitalhunt/Views/pages/categories.dart';
+import 'package:digitalhunt/Views/pages/home.dart';
+import 'package:digitalhunt/Views/pages/local_news.dart';
 import 'package:digitalhunt/Views/pages/news.dart';
 import 'package:digitalhunt/Views/pages/profile.dart';
+import 'package:digitalhunt/Views/pages/reels.dart';
 import 'package:digitalhunt/Views/pages/search.dart';
 import 'package:digitalhunt/widgets/custom_text.dart';
 import 'package:digitalhunt/widgets/page_item.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
+class HomeNav extends StatefulWidget {
   final Uri? initialDeepLink;
-  const HomePage({super.key, this.initialDeepLink});
+  const HomeNav({super.key, this.initialDeepLink});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeNav> createState() => _HomeNavState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeNavState extends State<HomeNav> {
   final ScrollController _scrollController = ScrollController();
   PageController _pageController = PageController(keepPage: true);
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  int _currentIndex = 0;
   List<IconData> iconList = [
-    Icons.list,
-    Icons.search,
-    Icons.remove_red_eye_outlined,
-    Icons.refresh,
+    Icons.home,
+    Icons.newspaper,
+    Icons.category_outlined,
+    Icons.video_file_outlined,
+    Icons.location_pin,
+
     // Icons.plus_circle
   ];
-  bool _showBars = false;
+  bool _showBars = true;
   Timer? _barsTimer;
   StreamSubscription<Uri>? _linkSubscription;
 
   // ----------------------------------------------------------
   // SHOW / HIDE APP BAR + BOTTOM NAVIGATION
   // ----------------------------------------------------------
-
-  void _toggleBars() {
-    _barsTimer?.cancel();
-
-    setState(() {
-      _showBars = !_showBars;
-    });
-
-    // Automatically hide again after 3 seconds
-    if (_showBars) {
-      _barsTimer = Timer(const Duration(seconds: 3), () {
-        if (mounted) {
-          setState(() {
-            _showBars = false;
-          });
-        }
-      });
-    }
-  }
 
   // ----------------------------------------------------------
   // REFRESH
@@ -84,76 +72,61 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.sizeOf(context).height;
 
-    return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: true,
-      key: _scaffoldKey,
-      // ======================================================
-      // APP BAR
-      // ======================================================
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: AnimatedSlide(
-          offset: _showBars ? Offset.zero : const Offset(0, -1),
+    return PopScope(
+      onPopInvokedWithResult: (val, res) {
+        _onWillPop();
+      },
+      child: Scaffold(
+        extendBody: true,
+        extendBodyBehindAppBar: true,
+        key: _scaffoldKey,
+        // ======================================================
+        // APP BAR
+        // ======================================================
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: AnimatedSlide(
+            offset: _showBars ? Offset.zero : const Offset(0, -1),
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+
+            child: AppBar(title: const Text('Reader'), automaticallyImplyLeading: false, automaticallyImplyActions: false),
+          ),
+        ),
+
+        // ======================================================
+        // BODY
+        // ======================================================
+        body: PageView(
+          controller: _pageController,
+          allowImplicitScrolling: false,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            // SizedBox.expand(
+            //   child: GestureDetector(behavior: HitTestBehavior.translucent, onTap: _toggleBars, child: News()),
+            // ),
+            HomePage(),
+            SizedBox.expand(
+              child: GestureDetector(behavior: HitTestBehavior.translucent, onTap: _toggleBars, child: News()),
+            ),
+            Categories(),
+            Reels(),
+            LocalNews(),
+          ],
+        ),
+
+        // ======================================================
+        // BOTTOM NAVIGATION
+        // ======================================================
+        bottomNavigationBar: AnimatedSlide(
+          offset: _showBars ? Offset.zero : const Offset(0, 1),
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
-
-          child: AppBar(title: const Text('Reader'), automaticallyImplyLeading: false, automaticallyImplyActions: false),
+          child: ChangeNotifierProvider(create: (context) => BottomNavBloc(), child: _bottomNavigationBar()),
         ),
+        drawer: Drawer(child: _drawerWidget(), width: MediaQuery.of(context).size.width),
+        endDrawer: Drawer(child: _endDrawerWidget(), width: MediaQuery.of(context).size.width),
       ),
-
-      // ======================================================
-      // BODY
-      // ======================================================
-      body: SizedBox.expand(
-        child: GestureDetector(behavior: HitTestBehavior.translucent, onTap: _toggleBars, child: News()),
-
-        //   RefreshIndicator(
-        //     onRefresh: _refresh,
-        //     edgeOffset: Size.fromHeight(kToolbarHeight).height,
-        //     child: ListView.builder(
-        //       controller: _scrollController,
-
-        //       physics: CustomPageScrollPhysics(pageHeight: MediaQuery.sizeOf(context).height, parent: const BouncingScrollPhysics()),
-
-        //       itemCount: pages.length,
-
-        //       itemBuilder: (context, index) {
-        //         return FlipPage(
-        //           controller: _scrollController,
-        //           index: index,
-        //           pageHeight: screenHeight,
-
-        //           child: SizedBox(
-        //             height: screenHeight,
-        //             width: double.infinity,
-
-        //             child: Container(
-        //               color: Theme.of(context).shadowColor,
-
-        //               alignment: Alignment.center,
-
-        //               child: Text(pages[index], style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
-        //             ),
-        //           ),
-        //         );
-        //       },
-        //     ),
-        //   ),
-        // ),
-      ),
-
-      // ======================================================
-      // BOTTOM NAVIGATION
-      // ======================================================
-      bottomNavigationBar: AnimatedSlide(
-        offset: _showBars ? Offset.zero : const Offset(0, 1),
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-        child: ChangeNotifierProvider(create: (context) => BottomNavBloc(), child: _bottomNavigationBar()),
-      ),
-      drawer: Drawer(child: _drawerWidget(), width: MediaQuery.of(context).size.width,),
-      endDrawer: Drawer(child: _endDrawerWidget(), width: MediaQuery.of(context).size.width),
     );
   }
 
@@ -169,28 +142,63 @@ class _HomePageState extends State<HomePage> {
       iconSize: 25,
       selectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
       items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(icon: Icon(iconList[0]), label: 'settings'.tr()),
-        BottomNavigationBarItem(icon: Icon(iconList[1], size: 25), label: 'search'.tr()),
-        BottomNavigationBarItem(icon: Icon(iconList[2], size: 25), label: 'pending'.tr()),
-        BottomNavigationBarItem(icon: Icon(iconList[3]), label: 'refresh'.tr()),
+        BottomNavigationBarItem(icon: Icon(iconList[0]), label: 'home'.tr()),
+        BottomNavigationBarItem(icon: Icon(iconList[1]), label: 'news'.tr()),
+        BottomNavigationBarItem(icon: Icon(iconList[2]), label: 'categories'.tr()),
+        BottomNavigationBarItem(icon: Icon(iconList[3]), label: 'reels'.tr()),
+        BottomNavigationBarItem(icon: Icon(iconList[4]), label: 'local_news'.tr()),
       ],
     );
   }
 
   void onTabTapped(int index) {
-    // setState(() {
-    //   context.read<BottomNavBloc>().currentIndex = index;
-    // });
-    // if (_pageController.hasClients) {
-    //   _pageController.animateToPage(index, curve: Curves.easeIn, duration: Duration(milliseconds: 250));
+    setState(() {
+      context.read<BottomNavBloc>().currentIndex = index;
+    });
+    if (_pageController.hasClients) {
+      _pageController.animateToPage(index, curve: Curves.easeIn, duration: Duration(milliseconds: 250));
+    }
+    if (index != 1) {
+      _barsTimer!.cancel();
+      _showBars = true;
+
+      setState(() {});
+    }
+    // if (index == 0) {
+    //   _scaffoldKey.currentState!.openDrawer();
     // }
-    if (index == 0) {
-      _scaffoldKey.currentState!.openDrawer();
-    }
-    if (index == 1) {
-      _scaffoldKey.currentState!.openEndDrawer();
-    }
+    // if (index == 1) {
+    //   _scaffoldKey.currentState!.openEndDrawer();
+    // }
     print(index);
+  }
+
+  void _toggleBars() {
+    _barsTimer?.cancel();
+
+    setState(() {
+      _showBars = !_showBars;
+    });
+
+    // Automatically hide again after 3 seconds
+    if (_showBars) {
+      _barsTimer = Timer(const Duration(seconds: 3), () {
+        if (mounted) {
+          setState(() {
+            _showBars = false;
+          });
+        }
+      });
+    }
+  }
+
+  Future _onWillPop() async {
+    if (_currentIndex != 0) {
+      setState(() => _currentIndex = 0);
+      _pageController.animateToPage(0, duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+    } else {
+      await SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop', true);
+    }
   }
 
   Widget? _drawerWidget() {

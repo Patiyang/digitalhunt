@@ -9,7 +9,7 @@
   "ref": "Reference",
   "refer_now": "Refer Now",
   "status_video": "Status Video",
-  "exclusive": "Exclusive content",
+  "exclusive": "DigitalHunt Exclusive",
   "response": "Give Feedback",
   "contact": "Contact",
   "exit": "Exit",
@@ -43,7 +43,7 @@
   "intro-description2": "Discover the stories that matter, from breaking developments to insightful coverage across topics and communities.",
   "intro-title3": "News For You",
   "intro-description3": "Discover stories tailored to your interests, with fresh updates and breaking news whenever they happen.",
-    "about_us":"About Us",
-  "terms":"Terms and conditions",
-  "contact_us":"Contact Us"
+  "about_us": "About Us",
+  "terms": "Terms and conditions",
+  "contact_us": "Contact Us"
 }

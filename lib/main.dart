@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unity_ads_plugin/unity_ads_plugin.dart';
+// import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,19 +20,19 @@ void main() async {
   // await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  UnityAds.init(
-    gameId: '800358513',
-    testMode: false,
-    onComplete: () {
-      UnityAds.load(
-        placementId: 'Banner_Android',
-        onComplete: (placementId) => print('Load Complete $placementId'),
-        onFailed: (placementId, error, message) => print('Load Failed $placementId: $error $message'),
-      );
-      UnityAds.setPrivacyConsent(PrivacyConsentType.gdpr, true);
-    },
-    onFailed: (error, message) => print('Unity Ads Initialization Failed: $error $message'),
-  );
+  // UnityAds.init(
+  //   gameId: '800358513',
+  //   testMode: false,
+  //   onComplete: () {
+  //     UnityAds.load(
+  //       placementId: 'Banner_Android',
+  //       onComplete: (placementId) => print('Load Complete $placementId'),
+  //       onFailed: (placementId, error, message) => print('Load Failed $placementId: $error $message'),
+  //     );
+  //     UnityAds.setPrivacyConsent(PrivacyConsentType.gdpr, true);
+  //   },
+  //   onFailed: (error, message) => print('Unity Ads Initialization Failed: $error $message'),
+  // );
   String getLanguages() {
     if (prefs.getString('language') == 'English') {
       ThemeModel().myValue = 'Poppins';

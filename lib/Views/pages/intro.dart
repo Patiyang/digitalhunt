@@ -19,7 +19,7 @@ class _IntroPageState extends State<IntroPage> {
   void afterIntroComplete() {
     final SignInBloc sb = Provider.of<SignInBloc>(context, listen: false);
     sb.setSignIn();
-    nextScreenReplace(context, HomePage());
+    nextScreenReplace(context, HomeNav());
   }
 
   @override

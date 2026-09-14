@@ -1,5 +1,6 @@
 import 'package:digitalhunt/Blocs/sign_in_bloc.dart';
 import 'package:digitalhunt/Views/pages/settings.dart';
+import 'package:digitalhunt/Views/pages/status_video.dart';
 import 'package:digitalhunt/utils/config/config.dart';
 import 'package:digitalhunt/utils/next_screen.dart';
 import 'package:digitalhunt/widgets/custom_profile_list_tile.dart';
@@ -37,7 +38,8 @@ class ProfileSettingsState extends State<ProfileSettings> {
   Widget build(BuildContext context) {
     final sb = context.watch<SignInBloc>();
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(actionsPadding: EdgeInsets.only(right: 15),
+      
         leadingWidth: MediaQuery.of(context).size.width * .6,
         leading: Row(
           mainAxisSize: MainAxisSize.min,
@@ -53,8 +55,9 @@ class ProfileSettingsState extends State<ProfileSettings> {
         ),
         actions: [
           GestureDetector(
-            onTap: ()=>Navigator.pop(context),
-            child: CustomText(text: 'exit'.tr())),
+            onTap: () => Navigator.pop(context),
+            child: CustomText(text: 'exit'.tr(), size: 22, fontWeight: FontWeight.w500,),
+          ),
           SizedBox(width: 10),
         ],
       ),
@@ -65,9 +68,15 @@ class ProfileSettingsState extends State<ProfileSettings> {
           children: [
             userUi(context),
             ListTile(
-              leading: CircleAvatar(child: FaIcon(FontAwesomeIcons.globe, size: 14)),
-              title: CustomText(text: 'select language'.tr(), size: 18, fontWeight: FontWeight.w700),
-              subtitle: CustomRich(boldFont: 'select language'.tr(), lightFont: 'english'.tr()),
+              leading: CircleAvatar(child: FaIcon(FontAwesomeIcons.globe, size: 14), backgroundColor: Config().appColor),
+              title: CustomText(text: 'select language'.tr(), size: 18, fontWeight: FontWeight.w600),
+              subtitle: CustomRich(
+                boldFont: 'select language'.tr(),
+                lightFont: 'english'.tr(),
+                callback: () {
+                  print('change language');
+                },
+              ),
               trailing: Container(
                 decoration: BoxDecoration(shape: BoxShape.circle),
                 padding: EdgeInsets.all(10),
@@ -75,9 +84,16 @@ class ProfileSettingsState extends State<ProfileSettings> {
               ),
             ),
             ListTile(
-              leading: CircleAvatar(child: FaIcon(FontAwesomeIcons.locationPin, size: 14)),
-              title: CustomText(text: 'select region'.tr(), size: 18, fontWeight: FontWeight.w700),
-              subtitle: CustomRich(boldFont: 'add location'.tr(), lightFont: 'change'.tr(), reversed: false),
+              leading: CircleAvatar(child: FaIcon(FontAwesomeIcons.locationPin, size: 14), backgroundColor: Config().appColor),
+              title: CustomText(text: 'select region'.tr(), size: 18, fontWeight: FontWeight.w600),
+              subtitle: CustomRich(
+                boldFont: 'add location'.tr(),
+                lightFont: 'change'.tr(),
+                reversed: false,
+                callback: () {
+                  print('change region');
+                },
+              ),
               trailing: Container(
                 decoration: BoxDecoration(shape: BoxShape.circle),
                 padding: EdgeInsets.all(10),
@@ -85,8 +101,8 @@ class ProfileSettingsState extends State<ProfileSettings> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: CustomText(text: 'categories'.tr()),
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: CustomText(text: 'categories'.tr(), size: 18,),
             ),
             Container(
               height: 120,
@@ -124,9 +140,9 @@ class ProfileSettingsState extends State<ProfileSettings> {
     final sb = context.watch<SignInBloc>();
     if (sb.guestUser) {
       return ListTile(
-        leading: CircleAvatar(child: FaIcon(FontAwesomeIcons.person)),
-        title: CustomText(text: 'guest'.tr(), size: 18, fontWeight: FontWeight.w700),
-        subtitle: CustomRich(lightFont: 'to select email id'.tr(), boldFont: 'click here'.tr(), callback: () {}),
+        leading: CircleAvatar(child: Icon(Icons.person), backgroundColor: Config().appColor),
+        title: CustomText(text: 'guest'.tr(), size: 18, fontWeight: FontWeight.w600),
+        subtitle: CustomRich(lightFont: 'to select email id'.tr(), boldFont: 'click_here'.tr(), callback: () {}),
       );
     }
     return userSignedInUi();
@@ -134,14 +150,14 @@ class ProfileSettingsState extends State<ProfileSettings> {
 
   userSignedInUi() {}
 
-  void getListItems() async{
-        // await Future.delayed(Duration(microseconds: 5));
+  void getListItems() async {
+    // await Future.delayed(Duration(microseconds: 5));
 
     listItems = [
       CustomProfileListTile(
         leadingImage: Icon(Icons.eco),
         title: 'fact_check'.tr(),
-        trailing: CustomRich(boldFont: 'check_now'.tr()),
+        trailing: CustomRich(boldFont: 'check_now'.tr(),callback: (){}),
         callback: () {
           print('fact check');
         },
@@ -149,7 +165,7 @@ class ProfileSettingsState extends State<ProfileSettings> {
       CustomProfileListTile(
         leadingImage: Icon(Icons.contact_page),
         title: 'ref'.tr(),
-        trailing: CustomRich(boldFont: 'refer_now'.tr()),
+        trailing: CustomRich(boldFont: 'refer_now'.tr(), callback: (){},),
         callback: () {
           print('ref');
         },
@@ -158,6 +174,7 @@ class ProfileSettingsState extends State<ProfileSettings> {
         leadingImage: Icon(Icons.video_camera_back),
         title: 'status_video'.tr(),
         callback: () {
+          nextScreen(context, StatusVideos());
           print('status_video');
         },
       ),

@@ -88,7 +88,7 @@ class CustomRich extends StatelessWidget {
     return RichText(
       maxLines: maxlines ?? 5,
       textAlign: textAlign ?? TextAlign.start,
-      text: reversed == true
+      text: reversed == false
           ? TextSpan(
               children: [
                 TextSpan(
@@ -97,7 +97,7 @@ class CustomRich extends StatelessWidget {
                     fontFamily: Theme.of(context).textTheme.titleMedium!.fontFamily,
                     color: lightColor ?? Colors.grey,
                     fontSize: lightFontSize ?? 13,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 TextSpan(text: ' '),
@@ -108,7 +108,7 @@ class CustomRich extends StatelessWidget {
                     fontFamily: Theme.of(context).textTheme.titleMedium!.fontFamily,
                     color: callback != null ? Config().appColor : boldColor ?? Theme.of(context).textTheme.titleMedium!.color,
                     fontSize: boldFontSize ?? 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w500,
                     letterSpacing: letterSpacing,
                     decoration: callback != null ? TextDecoration.underline : TextDecoration.none,
                   ),
@@ -124,7 +124,7 @@ class CustomRich extends StatelessWidget {
                     fontFamily: Theme.of(context).textTheme.titleMedium!.fontFamily,
                     color: callback != null ? Config().appColor : boldColor ?? Theme.of(context).textTheme.titleMedium!.color,
                     fontSize: boldFontSize ?? 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w400,
                     letterSpacing: letterSpacing,
                     decoration: callback != null ? TextDecoration.underline : TextDecoration.none,
                   ),

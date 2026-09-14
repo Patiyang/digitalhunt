@@ -12,20 +12,23 @@ class ProfileListTile extends StatefulWidget {
 class _ProfileListTileState extends State<ProfileListTile> {
   @override
   Widget build(BuildContext context) {
-    return  ListTile(
+    return ListTile(shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
       leading: widget.customProfileListTile.leadingImage,
-      title: CustomText(text: widget.customProfileListTile.title,),
+      title: CustomText(text: widget.customProfileListTile.title),
+      titleTextStyle: TextStyle(fontSize: 14),
+      
       trailing: widget.customProfileListTile.trailing,
-      onTap: widget.customProfileListTile.callback,contentPadding: EdgeInsets.all(0),
+      onTap: widget.customProfileListTile.callback,
+      contentPadding: EdgeInsets.symmetric(horizontal:5),
     );
   }
 }
 
-class CustomProfileListTile{
+class CustomProfileListTile {
   final Icon leadingImage;
   final String title;
   final Widget trailing;
   final VoidCallback callback;
 
-  CustomProfileListTile({required this.leadingImage, required this.title,  this.trailing=const Icon(Icons.arrow_forward_ios,), required this.callback });
+  CustomProfileListTile({required this.leadingImage, required this.title, this.trailing = const Icon(Icons.arrow_forward_ios, size: 18,), required this.callback});
 }
