@@ -2,6 +2,8 @@ import 'package:digitalhunt/Models/post_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_video_thumbnail/get_video_thumbnail.dart';
+import 'package:get_video_thumbnail/index.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Config {
@@ -52,9 +54,9 @@ class Config {
   static const liveshareIp = 'https://onlinehunt.in/';
   static const testshareIp = 'http://192.168.100.26/';
 
-  static const mainIp = testipAddress;
-  static const avatarIp = publicTestIpAddress;
-  static const mediaIp = testshareIp;
+  static const mainIp = serverpAddress;
+  static const avatarIp = publicMainIpAddress;
+  static const mediaIp = liveshareIp;
   static const shareIp = liveshareIp;
 
   static const tokenKey = 'token';
@@ -83,6 +85,108 @@ class Config {
 
     return '${words.take(maxWords).join(' ')}...';
   }
+
+  String? extractYoutubeId(String url) {
+    RegExp regExp = RegExp(
+      r'^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*',
+      caseSensitive: false,
+      multiLine: false,
+    );
+
+    final match = regExp.firstMatch(url);
+    if (match != null && match.groupCount >= 1) {
+      return match.group(1);
+    }
+    return null;
+  }
+
+  String getYoutubeThumbnail(String videoUrl) {
+    final uri = Uri.tryParse(videoUrl.trim());
+
+    if (uri == null) {
+      return '';
+    }
+
+    String? videoId;
+
+    // youtube.com/watch?v=VIDEO_ID
+    if (uri.host.contains('youtube.com')) {
+      videoId = uri.queryParameters['v'];
+
+      // youtube.com/shorts/VIDEO_ID
+      if (videoId == null && uri.pathSegments.contains('shorts')) {
+        final index = uri.pathSegments.indexOf('shorts');
+
+        if (index + 1 < uri.pathSegments.length) {
+          videoId = uri.pathSegments[index + 1];
+        }
+      }
+
+      // youtube.com/embed/VIDEO_ID
+      if (videoId == null && uri.pathSegments.contains('embed')) {
+        final index = uri.pathSegments.indexOf('embed');
+
+        if (index + 1 < uri.pathSegments.length) {
+          videoId = uri.pathSegments[index + 1];
+        }
+      }
+
+      // youtube.com/live/VIDEO_ID
+      if (videoId == null && uri.pathSegments.contains('live')) {
+        final index = uri.pathSegments.indexOf('live');
+
+        if (index + 1 < uri.pathSegments.length) {
+          videoId = uri.pathSegments[index + 1];
+        }
+      }
+    }
+
+    // youtu.be/VIDEO_ID
+    if (videoId == null && uri.host == 'youtu.be') {
+      if (uri.pathSegments.isNotEmpty) {
+        videoId = uri.pathSegments.first;
+      }
+    }
+
+    if (videoId == null || videoId.isEmpty) {
+      return '';
+    }
+
+    return 'https://img.youtube.com/vi/$videoId/0.jpg';
+  }
+
+  Future<Uint8List?> getVideoThumbnail(String videoUrl) async {
+    try {
+      return await VideoThumbnail.thumbnailData(video: videoUrl, imageFormat: ImageFormat.JPEG, maxWidth: 600, quality: 80);
+    } catch (e) {
+      print('Thumbnail error: $e');
+      return null;
+    }
+  }
+
+  double getYoutubeAspectRatio(String url) {
+    final isShort = url.contains('/shorts/');
+
+    return isShort ? 9 / 16 : 16 / 9;
+  }
+
+  Future<Uint8List?> getCachedThumbnail(String url,  Map<String, Uint8List> thumbnailCache) async {
+    final cached = thumbnailCache[url];
+
+    if (cached != null) {
+      return cached;
+    }
+
+    final thumbnail = await getVideoThumbnail(url);
+
+    if (thumbnail != null) {
+      thumbnailCache[url] = thumbnail;
+    }
+
+    return thumbnail;
+  }
+  // Usage
+  // String? id = extractYoutubeId("https://youtube.com");
 
   //share
 
@@ -165,13 +269,4 @@ class Config {
   //       return '${HelperClass.shareIp}live?type=live_news&id=${liveNews!.liveNewsId}';
   //     }
   //   }
-
-  String getYoutubeThumbnail(String videoUrl) {
-    final Uri? uri = Uri.tryParse(videoUrl);
-    if (uri == null) {
-      return '';
-    }
-
-    return 'https://img.youtube.com/vi/${uri.queryParameters['v']}/0.jpg';
-  }
 }

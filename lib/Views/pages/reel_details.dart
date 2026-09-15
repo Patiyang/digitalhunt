@@ -1,32 +1,33 @@
 import 'dart:async';
 
 import 'package:chewie/chewie.dart';
-import 'package:digitalhunt/Models/post_model.dart';
+import 'package:digitalhunt/Models/reel_model.dart';
 import 'package:digitalhunt/utils/config/config.dart';
 import 'package:digitalhunt/utils/loading.dart';
+import 'package:digitalhunt/widgets/custom_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class StatusVideoDetails extends StatefulWidget {
-  final PostModel? postModel;
-  const StatusVideoDetails({super.key, this.postModel});
+class ReelDetails extends StatefulWidget {
+  final ReelModel? reelModel;
+  const ReelDetails({super.key, this.reelModel});
 
   @override
-  State<StatusVideoDetails> createState() => _StatusVideoDetailsState();
+  State<ReelDetails> createState() => _ReelDetailsState();
 }
 
-class _StatusVideoDetailsState extends State<StatusVideoDetails> {
+class _ReelDetailsState extends State<ReelDetails> {
   late YoutubePlayerController _controller;
   late VideoPlayerController _videoPlayerController;
   late ChewieController chewieController;
   bool loadingVideo = true;
   bool success = false;
-  PostModel? postModel;
+  ReelModel? reelModel;
   @override
   void dispose() {
-    _controller.close();
+    chewieController.dispose();
     _videoPlayerController.dispose();
     chewieController.dispose();
     super.dispose();
@@ -34,22 +35,21 @@ class _StatusVideoDetailsState extends State<StatusVideoDetails> {
 
   @override
   void initState() {
-    getArticleDetails();
     super.initState();
+    getReelDetails();
   }
 
   @override
   Widget build(BuildContext context) {
-    final innerScrollController = PrimaryScrollController.of(context);
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: false, toolbarHeight: MediaQuery.of(context).padding.top),
       body: Stack(
         fit: StackFit.passthrough,
         children: [
-          postModel!.video_url.contains('youtube')
+          Loading(),
+          reelModel!.url.contains('youtube')
               ? YoutubePlayer(
                   controller: _controller,
-                  aspectRatio: Config().getYoutubeAspectRatio(postModel!.video_url),
+                  aspectRatio: Config().getYoutubeAspectRatio(reelModel!.url),
                   builder: (context, player, controller) {
                     return Container(height: MediaQuery.of(context).size.height, child: player);
                   },
@@ -87,9 +87,9 @@ class _StatusVideoDetailsState extends State<StatusVideoDetails> {
     );
   }
 
-  getArticleDetails() {
-    postModel = widget.postModel;
-    if (postModel!.video_url!.contains('youtube')) {
+  getReelDetails() {
+    reelModel = widget.reelModel;
+    if (reelModel!.url!.contains('youtube')) {
       initYoutube();
     } else {
       initOtherPlayer();
@@ -102,12 +102,12 @@ class _StatusVideoDetailsState extends State<StatusVideoDetails> {
     //   flags: YoutubePlayerFlags(autoPlay: true, mute: false, forceHD: false, loop: true, controlsVisibleAtStart: false, enableCaption: false),
     // );
     _controller = YoutubePlayerController.fromVideoId(
-      videoId: Config().extractYoutubeId(postModel!.video_url)!,
+      videoId: Config().extractYoutubeId(reelModel!.url)!,
       autoPlay: false,
       params: YoutubePlayerParams(loop: true, enableCaption: false, mute: false, showControls: true),
     );
 
-    _controller.loadVideoById(videoId: Config().extractYoutubeId(postModel!.video_url)!);
+    _controller.loadVideoById(videoId: Config().extractYoutubeId(reelModel!.url)!);
     Timer.periodic(Duration(seconds: 1), (t) {});
     // _controller.addListener(() {});
     // _controller.value.isReady
@@ -121,7 +121,7 @@ class _StatusVideoDetailsState extends State<StatusVideoDetails> {
   }
 
   initOtherPlayer() async {
-    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(postModel!.video_url!));
+    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(reelModel!.url));
     try {
       await _videoPlayerController.initialize();
 

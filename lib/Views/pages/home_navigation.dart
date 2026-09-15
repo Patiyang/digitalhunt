@@ -168,7 +168,7 @@ class _HomeNavState extends State<HomeNav> {
     if (_pageController.hasClients) {
       _pageController.animateToPage(index, curve: Curves.easeIn, duration: Duration(milliseconds: 250));
     }
-    if (index != 1) {
+    if (index != 1&&_barsTimer!=null) {
       _barsTimer!.cancel();
       _showBars = true;
 

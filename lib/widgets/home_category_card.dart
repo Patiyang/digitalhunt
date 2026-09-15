@@ -27,7 +27,7 @@ class HomeCategoryCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ListTile(
-            leading: CustomText(text: index.toString(), size: 45, fontWeight: FontWeight.bold),
+            leading: CustomText(text: (index+1).toString(), size: 45, fontWeight: FontWeight.bold),
             title: CustomText(text: categoryItem.categoryTitle),
             subtitle: CustomText(text: '${'of'} $total'),
             trailing: Icon(Icons.arrow_forward_ios_rounded),
