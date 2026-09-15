@@ -12,14 +12,14 @@ class ProfileListTile extends StatefulWidget {
 class _ProfileListTileState extends State<ProfileListTile> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
+    return ListTile(
       leading: widget.customProfileListTile.leadingImage,
       title: CustomText(text: widget.customProfileListTile.title),
-      titleTextStyle: TextStyle(fontSize: 14),
-      
+      // titleTextStyle: TextStyle(fontSize: 14),textColor: Colors.black,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
       trailing: widget.customProfileListTile.trailing,
       onTap: widget.customProfileListTile.callback,
-      contentPadding: EdgeInsets.symmetric(horizontal:5),
+      contentPadding: EdgeInsets.symmetric(horizontal: 5),
     );
   }
 }
@@ -30,5 +30,10 @@ class CustomProfileListTile {
   final Widget trailing;
   final VoidCallback callback;
 
-  CustomProfileListTile({required this.leadingImage, required this.title, this.trailing = const Icon(Icons.arrow_forward_ios, size: 18,), required this.callback});
+  CustomProfileListTile({
+    required this.leadingImage,
+    required this.title,
+    this.trailing = const Icon(Icons.arrow_forward_ios, size: 18),
+    required this.callback,
+  });
 }

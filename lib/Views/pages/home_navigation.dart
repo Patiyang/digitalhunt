@@ -14,6 +14,7 @@ import 'package:digitalhunt/widgets/page_item.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
@@ -71,7 +72,7 @@ class _HomeNavState extends State<HomeNav> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.sizeOf(context).height;
-
+    final bb = context.watch<BottomNavBloc>();
     return PopScope(
       onPopInvokedWithResult: (val, res) {
         _onWillPop();
@@ -90,7 +91,14 @@ class _HomeNavState extends State<HomeNav> {
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeOut,
 
-            child: AppBar(title: const Text('Reader'), automaticallyImplyLeading: false, automaticallyImplyActions: false),
+            child: AppBar(
+              title: bb.currentIndex == 0 || bb.currentIndex == 2 ? Text('Digitalhunt News') : Icon(iconList[bb.currentIndex]),
+              automaticallyImplyLeading: false,
+              automaticallyImplyActions: false,
+              centerTitle: true,
+              leading: IconButton(onPressed: () => _scaffoldKey.currentState!.openDrawer(), icon: FaIcon(FontAwesomeIcons.circleUser)),
+              actions: [IconButton(onPressed: () => _scaffoldKey.currentState!.openDrawer(), icon: FaIcon(FontAwesomeIcons.circlePlus))],
+            ),
           ),
         ),
 
@@ -124,6 +132,8 @@ class _HomeNavState extends State<HomeNav> {
           curve: Curves.easeOut,
           child: ChangeNotifierProvider(create: (context) => BottomNavBloc(), child: _bottomNavigationBar()),
         ),
+        drawerEnableOpenDragGesture: false,
+        endDrawerEnableOpenDragGesture: false,
         drawer: Drawer(child: _drawerWidget(), width: MediaQuery.of(context).size.width),
         endDrawer: Drawer(child: _endDrawerWidget(), width: MediaQuery.of(context).size.width),
       ),

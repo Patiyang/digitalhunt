@@ -44,12 +44,12 @@ class ProfileSettingsState extends State<ProfileSettings> {
         leading: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              onPressed: () {
-                nextScreen(context, Settings());
-              },
-              icon: FaIcon(FontAwesomeIcons.gears, size: 14),
-            ),
+            // IconButton(
+            //   onPressed: () {
+            //     nextScreen(context, Settings());
+            //   },
+            //   icon: FaIcon(FontAwesomeIcons.gears, size: 14),
+            // ),
             IconButton(onPressed: () {}, icon: FaIcon(FontAwesomeIcons.magnifyingGlass, size: 14)),
           ],
         ),

@@ -45,5 +45,10 @@
   "intro-description3": "Discover stories tailored to your interests, with fresh updates and breaking news whenever they happen.",
   "about_us": "About Us",
   "terms": "Terms and conditions",
-  "contact_us": "Contact Us"
+  "contact_us": "Contact Us",
+  "home":"Home",
+  "news":"News",
+  "reels":"Reels",
+  "local_news":"Local News",
+  "news_reels":"News Reels"
 }

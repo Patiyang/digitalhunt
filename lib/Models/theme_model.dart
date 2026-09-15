@@ -20,12 +20,17 @@ class ThemeModel {
     useMaterial3: true,
     iconTheme: IconThemeData(color: Colors.grey[600]),
     fontFamily: _fontFamily,
+    listTileTheme: ListTileThemeData(
+      titleTextStyle: TextStyle(fontSize: 14),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
+      textColor: Colors.black,
+    ),
     scaffoldBackgroundColor: Colors.grey[100],
     brightness: Brightness.light,
     primaryColorDark: Colors.grey[800],
     primaryColorLight: Colors.white,
     secondaryHeaderColor: Colors.grey[600],
-dividerTheme: DividerThemeData(color:Colors.grey[300] ),
+    dividerTheme: DividerThemeData(color: Colors.grey[300]),
     shadowColor: Colors.grey[300],
     appBarTheme: AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -55,8 +60,8 @@ dividerTheme: DividerThemeData(color:Colors.grey[300] ),
   final darkMode = ThemeData(
     primaryColor: Config().appColor,
     // primarySwatch: getMaterialColorFromColor(Config().appColor),
-    colorScheme: ColorScheme.dark(surface: Colors.grey[900]!).copyWith(primary: Config().appColor,),
-        // colorScheme: ColorScheme.fromSeed(seedColor: Config().appColor).copyWith(primary: Config().appColor, brightness: Brightness.dark,surface: Colors.grey[900]!,), // Generates a cohesive blue color scheme
+    colorScheme: ColorScheme.dark(surface: Colors.grey[900]!).copyWith(primary: Config().appColor),
+    // colorScheme: ColorScheme.fromSeed(seedColor: Config().appColor).copyWith(primary: Config().appColor, brightness: Brightness.dark,surface: Colors.grey[900]!,), // Generates a cohesive blue color scheme
 
     // colorSchemeSeed: Colors.blue, // Generates a cohesive blue color scheme
     useMaterial3: true,
@@ -64,8 +69,12 @@ dividerTheme: DividerThemeData(color:Colors.grey[300] ),
     fontFamily: _fontFamily,
     scaffoldBackgroundColor: Color(0xff303030),
     // brightness: Brightness.dark,
-    dividerTheme: DividerThemeData(color:Color(0xff282828)),
-
+    dividerTheme: DividerThemeData(color: Color(0xff282828)),
+ listTileTheme: ListTileThemeData(
+      titleTextStyle: TextStyle(fontSize: 14),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(10)),
+      textColor: Colors.white
+    ),
     primaryColorDark: Colors.grey[300],
     primaryColorLight: Colors.grey[800],
     secondaryHeaderColor: Colors.grey[400],
