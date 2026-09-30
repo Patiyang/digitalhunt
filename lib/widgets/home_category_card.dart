@@ -1,25 +1,28 @@
+import 'package:digitalhunt/Models/category_model.dart';
 import 'package:digitalhunt/utils/config/config.dart';
 import 'package:digitalhunt/widgets/custom_text.dart';
 import 'package:digitalhunt/widgets/profile_category_icon.dart';
 import 'package:flutter/material.dart';
 
 class HomeCategoryCard extends StatelessWidget {
-  final CategoryItem categoryItem;
+  final CategoryModel categoryItem;
   final int index;
   final int total;
+  final double? width;
+  final double? height;
 
-  const HomeCategoryCard({super.key, required this.categoryItem, required this.index, required this.total});
+  const HomeCategoryCard({super.key, required this.categoryItem, required this.index, required this.total, this.width, this.height});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 400,
-      width: 130,
+      height:height?? 400,
+      width:width?? 130,
       margin: EdgeInsets.symmetric(horizontal: 9),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        image: DecorationImage(image: AssetImage(Config().icon),fit: BoxFit.contain,),
-        color: Theme.of(context).shadowColor,
+        borderRadius: BorderRadius.circular(10),        color: Theme.of(context).shadowColor,
+
+        image: DecorationImage(image: AssetImage(Config().icon), fit: BoxFit.contain),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -27,7 +30,7 @@ class HomeCategoryCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ListTile(
-            leading: CustomText(text: (index+1).toString(), size: 45, fontWeight: FontWeight.bold),
+            leading: CustomText(text: (index + 1).toString(), size: 45, fontWeight: FontWeight.bold),
             title: CustomText(text: categoryItem.categoryTitle),
             subtitle: CustomText(text: '${'of'} $total'),
             trailing: Icon(Icons.arrow_forward_ios_rounded),
@@ -42,8 +45,8 @@ class HomeCategoryCard extends StatelessWidget {
               SizedBox(width: 10),
               Icon(Icons.arrow_forward_ios, size: 16),
             ],
-          ),          SizedBox(height: 10),
-
+          ),
+          SizedBox(height: 10),
         ],
       ),
     );

@@ -1,8 +1,9 @@
+import 'package:digitalhunt/Models/category_model.dart';
 import 'package:digitalhunt/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class ProfileCategory extends StatelessWidget {
-  final CategoryItem categoryItem;
+  final CategoryModel categoryItem;
   const ProfileCategory({super.key, required this.categoryItem});
 
   @override
@@ -19,11 +20,4 @@ class ProfileCategory extends StatelessWidget {
       ),
     );
   }
-}
-
-class CategoryItem {
-  final String categoryImage;
-  final String categoryTitle;
-
-  CategoryItem({required this.categoryImage, required this.categoryTitle});
 }

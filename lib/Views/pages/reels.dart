@@ -44,8 +44,8 @@ class _ReelsState extends State<Reels> with AutomaticKeepAliveClientMixin {
     return Scaffold(
       body: Center(
         child: Container(
-          height: MediaQuery.of(context).size.height - (kBottomNavigationBarHeight + 30),
-
+          // height: MediaQuery.of(context).size.height - (kBottomNavigationBarHeight + 30),
+padding: EdgeInsets.symmetric(vertical: 25),
           child: PageView.builder(
             pageSnapping: true,
             padEnds: true,
@@ -69,7 +69,13 @@ class _ReelsState extends State<Reels> with AutomaticKeepAliveClientMixin {
                 child: AspectRatio(
                   aspectRatio: _videoPlayerController.value.aspectRatio,
                   child: loadingVideo == true
-                      ? Loading()
+                      ? Stack(
+                        children: [
+                          Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Theme.of(context).shadowColor),
+                            padding: EdgeInsets.all(40),
+                            child: Loading()),CustomCacheImage(imageUrl: '', videoUrl: reels[index].url, radius: 0)
+                        ],
+                      )
                       : success == false
                       ? Text('unable to load video'.tr())
                       : Container(
@@ -77,7 +83,7 @@ class _ReelsState extends State<Reels> with AutomaticKeepAliveClientMixin {
                           width: MediaQuery.of(context).size.width,
                           child: listIndex == index
                               ? Chewie(controller: chewieController!)
-                              : CustomCacheImage(imageUrl: Config().getYoutubeThumbnail(reels[index].url), videoUrl: reels[index].url, radius: 0),
+                              : CustomCacheImage(imageUrl: '', videoUrl: reels[index].url, radius: 0),
                         ),
                 ),
               );
@@ -139,7 +145,7 @@ class _ReelsState extends State<Reels> with AutomaticKeepAliveClientMixin {
     try {
       await _videoPlayerController.initialize();
 
-      chewieController = ChewieController(videoPlayerController: _videoPlayerController, autoPlay: true, looping: true, showControls: true);
+      chewieController = ChewieController(videoPlayerController: _videoPlayerController, autoPlay: true, looping: true, showControls: true,controlsSafeAreaMinimum: EdgeInsets.only(bottom: kBottomNavigationBarHeight/3));
       setState(() {
         success = true;
         loadingVideo = false;

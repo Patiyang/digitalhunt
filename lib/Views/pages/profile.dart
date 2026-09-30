@@ -1,4 +1,5 @@
 import 'package:digitalhunt/Blocs/sign_in_bloc.dart';
+import 'package:digitalhunt/Models/category_model.dart';
 import 'package:digitalhunt/Views/pages/settings.dart';
 import 'package:digitalhunt/Views/pages/status_video.dart';
 import 'package:digitalhunt/utils/config/config.dart';
@@ -20,12 +21,12 @@ class ProfileSettings extends StatefulWidget {
 }
 
 class ProfileSettingsState extends State<ProfileSettings> {
-  List<CategoryItem> categoryItems = [
-    CategoryItem(categoryImage: Config().icon, categoryTitle: 'Category 1'),
-    CategoryItem(categoryImage: Config().icon, categoryTitle: 'Category 2'),
-    CategoryItem(categoryImage: Config().icon, categoryTitle: 'Category 3'),
-    CategoryItem(categoryImage: Config().icon, categoryTitle: 'Category 4'),
-    CategoryItem(categoryImage: Config().icon, categoryTitle: 'Category 5'),
+  List<CategoryModel> categoryItems = [
+    CategoryModel(categoryImage: Config().icon, categoryTitle: 'Category 1'),
+    CategoryModel(categoryImage: Config().icon, categoryTitle: 'Category 2'),
+    CategoryModel(categoryImage: Config().icon, categoryTitle: 'Category 3'),
+    CategoryModel(categoryImage: Config().icon, categoryTitle: 'Category 4'),
+    CategoryModel(categoryImage: Config().icon, categoryTitle: 'Category 5'),
   ];
   List<CustomProfileListTile> listItems = [];
   @override

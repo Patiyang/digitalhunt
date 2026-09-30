@@ -9,8 +9,10 @@ import 'package:digitalhunt/Views/pages/news.dart';
 import 'package:digitalhunt/Views/pages/profile.dart';
 import 'package:digitalhunt/Views/pages/reels.dart';
 import 'package:digitalhunt/Views/pages/search.dart';
+import 'package:digitalhunt/utils/next_screen.dart';
 import 'package:digitalhunt/widgets/custom_text.dart';
 import 'package:digitalhunt/widgets/page_item.dart';
+import 'package:digitalhunt/widgets/textfield.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -166,9 +168,13 @@ class _HomeNavState extends State<HomeNav> {
       context.read<BottomNavBloc>().currentIndex = index;
     });
     if (_pageController.hasClients) {
-      _pageController.animateToPage(index, curve: Curves.easeIn, duration: Duration(milliseconds: 250));
+      if (index != 2) {
+        _pageController.animateToPage(index, curve: Curves.easeIn, duration: Duration(milliseconds: 250));
+      } else {
+        showCategoriesBottomSheet();
+      }
     }
-    if (index != 1&&_barsTimer!=null) {
+    if (index != 1 && _barsTimer != null) {
       _barsTimer!.cancel();
       _showBars = true;
 
@@ -216,6 +222,47 @@ class _HomeNavState extends State<HomeNav> {
   }
 
   Widget? _endDrawerWidget() {
-    return SearchFilter();
+    return SearchScreen();
+  }
+
+  showCategoriesBottomSheet() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      enableDrag: false,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(topRight: Radius.circular(8), topLeft: Radius.circular(8)),
+      ),
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return Container(height: MediaQuery.of(context).size.height*.8,
+              decoration: BoxDecoration(              color: Theme.of(context).scaffoldBackgroundColor,
+
+                borderRadius: BorderRadius.only(topRight: Radius.circular(8), topLeft: Radius.circular(8)),
+              ),
+              child: ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.symmetric(horizontal: 7, vertical: 19),
+                children: [
+                  CustomTextField(
+                    hint: 'search'.tr(),
+                    ontap: () {
+                      Navigator.pop(context);
+                      nextScreen(context, SearchScreen());
+                    },
+                    inputBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                    readOnly: true,
+                    iconTwo: Icon(Icons.search),
+                  ),
+
+                  Categories(),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

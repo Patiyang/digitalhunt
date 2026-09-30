@@ -51,5 +51,9 @@
   "reels":"Reels",
   "local_news":"Local News",
   "news_reels":"News Reels",
-  "category":"Category"
+  "category":"Category",
+  "local_categories":"Local Categories",
+  "favorite_locations":"Favorite Locations",
+  "add_location":"Add Location",
+  "news_categories":"News Categories"
 }

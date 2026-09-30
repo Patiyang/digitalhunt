@@ -1,3 +1,4 @@
+import 'package:digitalhunt/Models/category_model.dart';
 import 'package:digitalhunt/Models/reel_model.dart';
 import 'package:digitalhunt/utils/config/config.dart';
 import 'package:digitalhunt/utils/loading_cards.dart';
@@ -17,12 +18,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<CategoryItem> categories = [
-    CategoryItem(categoryImage: Config().icon, categoryTitle: 'Category 1'),
-    CategoryItem(categoryImage: Config().icon, categoryTitle: 'Category 2'),
-    CategoryItem(categoryImage: Config().icon, categoryTitle: 'Category 3'),
-    CategoryItem(categoryImage: Config().icon, categoryTitle: 'Category 4'),
-    CategoryItem(categoryImage: Config().icon, categoryTitle: 'Category 5'),
+  List<CategoryModel> categories = [
+    CategoryModel(categoryImage: Config().icon, categoryTitle: 'Category 1'),
+    CategoryModel(categoryImage: Config().icon, categoryTitle: 'Category 2'),
+    CategoryModel(categoryImage: Config().icon, categoryTitle: 'Category 3'),
+    CategoryModel(categoryImage: Config().icon, categoryTitle: 'Category 4'),
+    CategoryModel(categoryImage: Config().icon, categoryTitle: 'Category 5'),
   ];
 
   List<ReelModel> reels = [];
@@ -43,11 +44,11 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: 5),
 
           Container(
-            height: 350,
+            height: 400,
             child: PageView.builder(
               pageSnapping: false,
               padEnds: false,
-              controller: PageController(initialPage: 0, viewportFraction: .5),
+              controller: PageController(initialPage: 0, viewportFraction: .6),
               scrollDirection: Axis.horizontal,
               itemCount: categories.isEmpty ? 3 : categories.length,
               onPageChanged: (index) {
@@ -59,7 +60,9 @@ class _HomePageState extends State<HomePage> {
               },
               itemBuilder: (BuildContext context, int index) {
                 if (categories.isEmpty) return LoadingCard(height: 200, width: 100);
-                return HomeCategoryCard(categoryItem: categories[index], index: index, total: categories.length);
+                return HomeCategoryCard(
+                  
+                  categoryItem: categories[index], index: index, total: categories.length);
               },
             ),
           ),

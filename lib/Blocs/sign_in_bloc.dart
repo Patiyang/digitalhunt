@@ -26,6 +26,38 @@ class SignInBloc extends ChangeNotifier {
 
   String _packageName = '';
   String get packageName => _packageName;
+
+  String? _name;
+  String? get name => _name;
+
+  String? _uid;
+  String? get uid => _uid;
+
+  String? _email;
+  String? get email => _email;
+
+  String? _imageUrl;
+  String? get imageUrl => _imageUrl;
+
+  String? _idToken;
+  String? get idToken => _idToken;
+
+  String? _userType;
+  String? get userType => _userType;
+
+  String? _state;
+  String? get state => _state;
+
+  String? _district;
+  String? get district => _district;
+
+  set district(String? district) {
+    _district = district;
+    print('the district is $_district');
+    notifyListeners();
+  }
+
+
   void initPackageInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     _appVersion = packageInfo.version;
